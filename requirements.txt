@@ -1,0 +1,11 @@
+langchain-openai
+langchain-google-genai
+# pip install -U google-genai langsmith
+google-genai
+langsmith
+isort>6.0.1
+langchain-tavily
+tavily-python 
+langchain>=0.3.27
+python-dotenv>1.1.1
+black>25.1.0
