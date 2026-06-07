@@ -6,15 +6,23 @@ from langchain_core.messages import HumanMessage
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnablePassthrough
-from langchain_openai import ChatOpenAI, OpenAIEmbeddings
+from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
 from langchain_pinecone import PineconeVectorStore
 
 load_dotenv()
 
 print("Initializing components...")
 
-embeddings = OpenAIEmbeddings()
-llm = ChatOpenAI()
+google_api_key = os.environ.get("GOOGLE_API_KEY") or os.environ.get("GEMINI_API_KEY")
+if not google_api_key:
+    raise ValueError("Google API key missing. Set GOOGLE_API_KEY or GEMINI_API_KEY.")
+
+embeddings = GoogleGenerativeAIEmbeddings(
+    model="gemini-embedding-2-preview",
+    api_key=google_api_key,
+    output_dimensionality=512,
+)
+llm = ChatGoogleGenerativeAI(model="gemini-flash-latest", google_api_key=google_api_key)
 
 vectorstore = PineconeVectorStore(
     index_name=os.environ["INDEX_NAME"], embedding=embeddings
